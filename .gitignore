@@ -1,5 +1,5 @@
 #Ignore this file
-#.gitignore
+.gitignore
 
 #Ignore .ipynb_checkpoints
 .ipynb_checkpoints
