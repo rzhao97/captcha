@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 import tensorflow as tf
+from tensorflow import keras
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from tensorflow.keras import Model
 
@@ -36,7 +37,7 @@ class captcha_model():
         self.X_test2, self.y_test2, self.ll_test2 = self.X[93333:], self.y[:, 93333:], self.labels[93333:]
         
 
-    def create_model(self, fc=[16,32,32,16], fs = [5,5,5,5], batch_size=64, epochs=10):
+    def build_model(self, fc=[32,64,32,16], fs = [5,5,5,5]):
         '''Create model with CNN layers and 5 Outputs
         '''
         input_shape = (50, 200, 1)
@@ -72,21 +73,39 @@ class captcha_model():
         model = Model(imgm, output)
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=["accuracy"])
 
+        self.model = model
+        
+    def fit_train(self, batch_size=64, epochs=10, verbose=0, validation_split=0.2):
         # Train Model
-        history = model.fit(self.X_train, [self.y_train[0], self.y_train[1], self.y_train[2],
+        history = self.model.fit(self.X_train, [self.y_train[0], self.y_train[1], self.y_train[2],
                                            self.y_train[3], self.y_train[4]],
-                            batch_size=batch_size, epochs=epochs, verbose=0, validation_split=0.2)
+                                 batch_size=batch_size, epochs=epochs, verbose=verbose,
+                                 validation_split=validation_split)
         
         scores = [max(i).round(3) for i in history.history.values()]
         train_acc = scores[6:11]
         val_acc = scores[-5:]
         print(f'Train Acc: {train_acc}')
         print(f'Val Acc: {val_acc}')
-
-        self.model = model
+        
+        self.model = self.model
     
-    def save_model(self):
-        return self.model
+    def fit_all(self, batch_size=64, epochs=10, verbose=0, validation_split=0.2):
+        # Train Model
+        history = self.model.fit(self.X, [self.y[0], self.y[1], self.y[2], self.y[3], self.y[4]],
+                                 batch_size=batch_size, epochs=epochs, verbose=verbose,
+                                 validation_split=validation_split)
+        
+        scores = [max(i).round(3) for i in history.history.values()]
+        train_acc = scores[6:11]
+        val_acc = scores[-5:]
+        print(f'Train Acc: {train_acc}')
+        print(f'Val Acc: {val_acc}')
+        
+        self.model = self.model
+    
+    def save_model(self, model_path):
+        self.model.save(model_path)
 
     def predict_lots(self, X_test, y_test, labels):
                      
@@ -138,5 +157,25 @@ class captcha_model():
         print(f"   Percent correct in 2nd Test: {b_acc}")
 
     
+def main():
+    # Create model class
+    cap = captcha_model()
     
+    # Load data to class
+    print('Loading data...')
+    cap.get_data()
+    print('Data received')
+    
+    # Build and train model
+    print('Building Model...')
+    cap.build_model(fc=[32,64,32,16], fs=[7,7,7,7])
+    print('Training Model...')
+    cap.fit_all()
+    
+    # Save model
+    cap.save_model('test_model.h5')
+    print("Model Saved")
+
+if __name__ == "__main__":
+    main()    
     
