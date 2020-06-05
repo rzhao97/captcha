@@ -9,7 +9,7 @@ from dash_canvas.utils import array_to_data_url, parse_jsonstring
 from dash_table import DataTable
 
 
-from subprocess import call
+import subprocess
 from dash.exceptions import PreventUpdate
 
 import numpy as np
@@ -21,11 +21,10 @@ import time
 import requests
 from skimage import io
 from tensorflow import keras
+import matplotlib.pyplot as plt
 
+from src.predict import *
 
-from src.model import captcha_model
-
-img_path = 'images/2a67a.png'
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -36,28 +35,37 @@ canvas_width = 200
 shape = (100,400)
 
 chars = string.ascii_lowercase + "0123456789"
-#model = pickle.load(open('src/model.pkl', 'rb'))
-model = keras.models.load_model('model.h5')
-
+#model = keras.models.load_model('draw_model.h5')
 
 
 # -------------------------------------------------------------------- #
 # -------------------------------------------------------------------- #
 
-app.layout = html.Div(children=[
+app.layout = html.Div(id='dark', children=[
     html.H1(children='Breaking Captcha', style={'text-align': 'center'}),
-
-    html.Img(src="https://www.laarchaeology.org/wp-content/uploads/2017/11/science.jpg", style={'width': '250px'}),
-    html.Img(src=img_path, style={'width': '250px'}),
+    
+    daq.ToggleSwitch(
+        id='daq-light-dark-theme',
+        label=['Light', 'Dark'],
+        style={'width': '250px', 'margin': 'auto'}, 
+        value=False
+    ),
+    
+    html.Br(), 
+    
+    html.Img(src=app.get_asset_url('2a76a.png'), style={'width': '250px'}),
+    html.Img(src=app.get_asset_url('exd3k.png'), style={'width': '250px'}),
+    html.Img(src=app.get_asset_url('ky5fm.png'), style={'width': '250px'}),
+    html.Img(src=app.get_asset_url('w8bp5.png'), style={'width': '250px'}),
 
     #html.Div([
     html.H6('Draw a 5 Character Captcha and press Save to see work'),
     #html.Div([
     DashCanvas(id='canvas',
-               lineWidth=10,
+               lineWidth=8,
                hide_buttons=["zoom", "pan", "line", "pencil", "rectangle", "select"],
                lineColor='black',
-               height=50,
+               height=100,
                width=400,
                ),
     #], className="five columns"),
@@ -67,18 +75,20 @@ app.layout = html.Div(children=[
     #]),
     
     DataTable(id='canvas-table',
-              style_cell={'textAlign': 'left'},
+              style_cell={'textAlign': 'left',
+                         'display': 'none'
+                         },
               columns=[{"name": i, "id": i} for i in columns]),
-    #html.Div([
     
-    html.Div([]),
+    # Hidden div inside the app that stores the drawn image
+    html.Div(id='drawn_img', style={'display': 'none'}),
     
     html.Div([
         html.H4('Run Captcha Breaking Model'),
             html.Button('BREAK', id='start', n_clicks=0)
     ]),
     html.Div([
-        html.H4(id='tt')
+        html.H4(id='prediction')
     ]),
     
     
@@ -88,16 +98,18 @@ app.layout = html.Div(children=[
 # -------------------------------------------------------------------- #
 # ------------------------ CALL BACKS -------------------------------- #
 
-@app.callback(Output('captcha_img', 'src'),
+@app.callback([Output('captcha_img', 'src'),
+               Output('drawn_img', 'children')],
               [Input('canvas', 'json_data')])
 def show_draw(string):
     if not string:
         raise PreventUpdate
         
     mask = parse_jsonstring(string, shape)
+    
     captcha_img = array_to_data_url((255 * mask).astype(np.uint8))
     
-    return captcha_img
+    return captcha_img, string
 
 @app.callback(Output('canvas-table', 'data'),
               [Input('canvas', 'json_data')])
@@ -110,29 +122,59 @@ def update_data(string):
 
 
 @app.callback(
-    Output('tt','children'),
-    [Input('start', 'n_clicks'),],
-    #[State('booleanswitch', 'on')]
+     Output('prediction','children'),
+     #Output('drawn_img', 'children')],
+    [
+     Input('start', 'n_clicks'),
+     Input('drawn_img', 'children')
+    ],
 )
-def predict(on):
+def predict(on, string):
     
     if not on:
         raise PreventUpdate
     
-    # X_test = (mask or captcha_img) after resizing and processing
+    print('sending string with length:',len(string))
     
-    # onehotpred = np.array(model.predict(X_test)).reshape(5,36)
-    #pred = ''
+    cmd = ['python', 'receiver.py'] + [string]
+    p = subprocess.Popen(cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     
-    #for i in onehotpred:
-    #    c = chars[np.argmax(i)]
-    #    pred += c
+    outputs = []
+    for line in p.stdout.readlines():
+        outputs.append(line)
+        print(line)
+        
+    print('Call Completed...')    
+    pred = str(outputs[-1])[2:-3]
+
+    return pred, None
+
+    """mask = parse_jsonstring(string, shape)
+    img = (255 * mask).astype(np.uint8)
+    #print(type(img))
+
+    print('About to predict img...')
+    split = split_drawn(img)
+    pred = model.predict(split)
+    #pred = predict_drawn(model, img)
+    print('Success')
+    #pred = 'abcd'
     
-    #tt = 'Predicted Captcha: ' + pred
-    
-    tt = 'abcd'
-    
-    return tt
+    return str(pred.shape) # str(pred)"""
+
+#-----------------------------------------------------------------
+# Dark Theme Callbacks
+
+@app.callback(
+    Output('dark', 'style'),
+    [Input('daq-light-dark-theme', 'value')]
+)
+def change_bg(dark_theme):
+    if(dark_theme):
+        return {'background-color': '#303030', 'color': 'white'}
+    else:
+        return {'background-color': 'white', 'color': 'black'}
+
 # -------------------------------------------------------------------- #
 # -------------------------------------------------------------------- #
 
