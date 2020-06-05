@@ -87,7 +87,5 @@ def build_model():
     # Train model
     history = model.fit(X_train, train_labels, batch_size=256, epochs=10, verbose=2, validation_split=0.2)
     
-    
-    
     return model
     

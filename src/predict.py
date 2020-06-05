@@ -23,13 +23,13 @@ def split_drawn(drawn_img):
         # Find location of each character
         (x, y, w, h) = cv2.boundingRect(contour)
 
-        # If width/height is too large to be a one character, split it
-        if w / h > 1.25:
+        """# If width/height is too large to be a one character, split it
+        if w / h > 1.5:
             half_width = int(w / 2)
             letter_image_regions.append((x, y, half_width, h))
             letter_image_regions.append((x + half_width, y, half_width, h))
-        else:
-            letter_image_regions.append((x, y, w, h))
+        else:"""
+        letter_image_regions.append((x, y, w, h))
 
     # Sort the characters
     letter_image_regions = sorted(letter_image_regions, key=lambda x: x[0])
@@ -51,6 +51,7 @@ def split_drawn(drawn_img):
     
     return np.array(char_lst)
 
+# function to predict drawn captcha
 def predict_drawn(model, img):
     chars = '0123456789' + string.ascii_lowercase
     
