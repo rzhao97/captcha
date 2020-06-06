@@ -52,10 +52,10 @@ app.layout = html.Div(children=[
                   }),
         
     # Example captcha images
-    html.Img(src=app.get_asset_url('2a76a.png'), style={'width': '250px'}),
-    html.Img(src=app.get_asset_url('exd3k.png'), style={'width': '250px'}),
-    html.Img(src=app.get_asset_url('ky5fm.png'), style={'width': '250px'}),
-    html.Img(src=app.get_asset_url('w8bp5.png'), style={'width': '250px'}),
+    #html.Img(src=app.get_asset_url('2a76a.png'), style={'width': '250px'}),
+    #html.Img(src=app.get_asset_url('exd3k.png'), style={'width': '250px'}),
+    #html.Img(src=app.get_asset_url('ky5fm.png'), style={'width': '250px'}),
+    #html.Img(src=app.get_asset_url('w8bp5.png'), style={'width': '250px'}),
     
     #html.Br(),
 
@@ -86,6 +86,7 @@ app.layout = html.Div(children=[
             dbc.Button('BREAK', id='start', size='lg', block=True, color='info', 
                        n_clicks=0, style={'display':'inline-block', "width": "30rem",
                                           "height":"6rem", 'font-size':'20px'}),
+            html.Br(),
             html.Br(),
             dbc.Spinner(html.Div([html.H1(id='prediction')]),
                        spinner_style={"width":"7rem", "height":"7rem", "color":"info"}),
