@@ -40,14 +40,18 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.head = [html.Link(rel='stylesheet', href='style.css')]
 
 app.layout = html.Div(id='grad1', children=[
-    html.H1(children='Breaking CAPTCHA', 
-            style={'text-align': 'center', 'font-size':'70px',
-                    'color': 'black',
-                    #'background': '#60A0B5',
-                    #'border': '3px solid indigo',
-                    #'padding': '7px',
-                    #font-family: monospace;
-                  }),
+    
+    
+    html.Div([html.Img(src=app.get_asset_url('transparent_robot.jpg'), style={'width': '250px'}),
+              html.H1(children='Breaking CAPTCHA', 
+                      style={'text-align': 'center', 'font-size':'70px',
+                             'color': 'black',
+                             #'background': '#60A0B5',
+                             #'border': '3px solid indigo',
+                             #'padding': '7px',
+                             #font-family: monospace;
+            }),
+    ]),
         
     # Example captcha images
     html.Img(src=app.get_asset_url('2a76a.png'), style={'width': '250px'}),
@@ -91,8 +95,9 @@ app.layout = html.Div(id='grad1', children=[
                                           "height":"6rem", 'font-size':'20px'}),
             html.Br(),
             html.Br(),
-            dbc.Spinner(html.Div([html.H1(id='prediction')]),
-                       spinner_style={"width":"7rem", "height":"7rem", "color":"info"}),
+            dbc.Spinner(html.Div([
+                                  html.H1(id='prediction')]),
+                                  spinner_style={"width":"7rem", "height":"7rem", "color":"info"}),
     ]),
     
     #html.Img(src=app.get_asset_url('robots.jpg'), style={'width': '250px','display': 'flex'}),
