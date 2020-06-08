@@ -18,17 +18,23 @@ from emnist import extract_training_samples, extract_test_samples
 
 
 def remove_upper(X_old, labels):
+    # Labels' number regions
     nums = list(range(0, 10))
     upper = list(range(10, 36))
     lower = list(range(36, 62))
     X = []
     y = []
     for x, lab in zip(X_old, labels):
+        # Save X data and labels for numbers
         if lab in nums:
             X.append(x)
             y.append(lab)
+        
+        # Ignore X data and labels for uppercase letters
         elif lab in upper:
             continue
+        
+        # Save X data and alter labels for lowercase letters
         elif lab in lower:
             lab -= 26
             X.append(x)

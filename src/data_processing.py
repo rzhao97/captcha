@@ -16,10 +16,10 @@ from PIL import Image
 chars = string.ascii_lowercase + "0123456789"
 num_chars = len(chars)
 
-# image data processing functions
+# CAPTCHA image data processing functions
 
 def remove_img_border(img):
-    # remove border
+    # remove border for image
     img[[0,49],1:199] -= 255
     img[:,0] -= 255
     img[:,199] -= 255
@@ -132,6 +132,16 @@ def mix_img(img):
     return img
 
 def l_data_mixer(from_src=False):
+    '''Processes and alters the l_data folder of 109,053 images 
+    Parameters:
+    -----------
+    from_src: True if function is run from src folder
+    
+    Returns:
+    X: 4 tensor numpy array of image data
+    y: One hot encoded targets
+    labels: labels for image data
+    '''
     if from_src:
         path = '../data/l_data/'
     else:

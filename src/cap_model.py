@@ -96,6 +96,7 @@ class captcha_model():
                                  batch_size=batch_size, epochs=epochs, verbose=verbose,
                                  validation_split=validation_split)
         
+        # Find accuracy scores to print
         scores = [max(i).round(3) for i in history.history.values()]
         train_acc = scores[6:11]
         val_acc = scores[-5:]
@@ -173,7 +174,7 @@ def main():
     cap.fit_all()
     
     # Save model
-    cap.save_model('test_model.h5')
+    cap.save_model('cap_model.h5')
     print("Model Saved")
 
 if __name__ == "__main__":

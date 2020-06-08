@@ -7,17 +7,23 @@ import cv2
 from emnist import extract_training_samples, extract_test_samples
 
 def remove_upper(X_old, labels):
+    # Labels' number regions
     nums = list(range(0, 10))
     upper = list(range(10, 36))
     lower = list(range(36, 62))
     X = []
     y = []
     for x, lab in zip(X_old, labels):
+        # Save X data and labels for numbers
         if lab in nums:
             X.append(x)
             y.append(lab)
+        
+        # Ignore X data and labels for uppercase letters
         elif lab in upper:
             continue
+        
+        # Save X data and alter labels for lowercase letters
         elif lab in lower:
             lab -= 26
             X.append(x)
@@ -26,19 +32,21 @@ def remove_upper(X_old, labels):
     return np.array(X), np.array(y)
 
 def load_data():
+    # Get numbers and letters data from EMNIST
     X_train, train_labels = extract_training_samples('byclass')
     X_test, test_labels = extract_test_samples('byclass')
     
-    # remove capital letters
+    # Remove capital letters
     X_train, train_labels = remove_upper(X_train, train_labels)
     X_test, test_labels = remove_upper(X_test, test_labels)
     
-    # merge train and test datasets
+    # Merge train and test datasets
     X = np.vstack((X_train, X_test))
     labels = np.hstack((train_labels, test_labels))
     
     return X, labels
 
+# While running, this function will create random handwritten CAPTCHA data
 def create_drawn_captchas(X, labels):
     chars = '0123456789' + string.ascii_lowercase
     save_path = '../data/drawn/'

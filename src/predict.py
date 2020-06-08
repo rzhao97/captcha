@@ -1,3 +1,4 @@
+# old predict.py for webapp where model cannot predict CAPTCHAs with a line through it
 import os
 import string
 import random
@@ -20,15 +21,8 @@ def split_drawn(drawn_img):
 
     # Iterate through the contours
     for contour in contours:
-        # Find location of each character
+        # Find and save location of each character
         (x, y, w, h) = cv2.boundingRect(contour)
-
-        """# If width/height is too large to be a one character, split it
-        if w / h > 1.5:
-            half_width = int(w / 2)
-            letter_image_regions.append((x, y, half_width, h))
-            letter_image_regions.append((x + half_width, y, half_width, h))
-        else:"""
         letter_image_regions.append((x, y, w, h))
 
     # Sort the characters
