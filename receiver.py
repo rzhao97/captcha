@@ -9,8 +9,9 @@ from src.predict import *
 
 shape = (200,800)
 chars = '0123456789' + string.ascii_lowercase
-model = keras.models.load_model('draw_model.h5')
 
+#model = keras.models.load_model('draw_model.h5')
+model = keras.models.load_model('full_draw_model1.h5')
 
 print('receiving string with length:', len(sys.argv[1]))
 
@@ -19,7 +20,22 @@ string = sys.argv[1]
 mask = parse_jsonstring(string, shape)
 img = (255 * mask).astype(np.uint8)
 img = cv2.resize(img, (200,50), interpolation = cv2.INTER_AREA)
+ 
+
+# for with line
+img = img / 255.0
+onehotpred = np.array(model.predict(img.reshape(1,50,200,1))).reshape(5,36)    
+pred = ''
     
+for i in onehotpred:
+    c = chars[np.argmax(i)]
+    pred += c
+    
+print(pred)
+ 
+    
+# for without line
+"""    
 # split the drawn image
 split_img = split_drawn(img)
     
@@ -34,8 +50,10 @@ for i in pred_arr:
 print(str(img.shape))
 print(str(split_img.shape))
 
-"""for i in split_img:
-    char_img = array_to_data_url((i.reshape(28,28).astype(np.uint8)))
-    print(char_img)"""
+#for i in split_img:
+    #char_img = array_to_data_url((i.reshape(28,28).astype(np.uint8)))
+    #print(char_img)
 
 print(pred)
+
+"""

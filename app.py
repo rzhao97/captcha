@@ -52,10 +52,10 @@ app.layout = html.Div(children=[
                   }),
         
     # Example captcha images
-    #html.Img(src=app.get_asset_url('2a76a.png'), style={'width': '250px'}),
-    #html.Img(src=app.get_asset_url('exd3k.png'), style={'width': '250px'}),
-    #html.Img(src=app.get_asset_url('ky5fm.png'), style={'width': '250px'}),
-    #html.Img(src=app.get_asset_url('w8bp5.png'), style={'width': '250px'}),
+    html.Img(src=app.get_asset_url('2a76a.png'), style={'width': '250px'}),
+    html.Img(src=app.get_asset_url('exd3k.png'), style={'width': '250px'}),
+    html.Img(src=app.get_asset_url('ky5fm.png'), style={'width': '250px'}),
+    html.Img(src=app.get_asset_url('w8bp5.png'), style={'width': '250px'}),
     
     #html.Br(),
 
@@ -63,7 +63,7 @@ app.layout = html.Div(children=[
     html.Div([
             html.H2('Draw a CAPTCHA and press Save to see work'),
             DashCanvas(id='canvas',
-                       lineWidth=17,
+                       lineWidth=12,
                        lineColor='black',
                        hide_buttons=["zoom", "pan", "line", "pencil", 
                                      "rectangle", "select"],
@@ -91,6 +91,9 @@ app.layout = html.Div(children=[
             dbc.Spinner(html.Div([html.H1(id='prediction')]),
                        spinner_style={"width":"7rem", "height":"7rem", "color":"info"}),
     ]),
+    
+    #html.Img(src=app.get_asset_url('robots.jpg'), style={'width': '250px','display': 'flex'}),
+
 
 ], style={'textAlign': 'center'})
 
