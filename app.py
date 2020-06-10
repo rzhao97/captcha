@@ -42,7 +42,7 @@ app.head = [html.Link(rel='stylesheet', href='style.css')]
 app.layout = html.Div(id='grad1', children=[
     
     
-    html.Div([html.Img(src=app.get_asset_url('transparent_robot.jpg'), style={'width': '250px'}),
+    html.Div([#html.Img(src=app.get_asset_url('transparent_robot.jpg'), style={'width': '250px'}),
               html.H1(children='Breaking CAPTCHA', 
                       style={'text-align': 'center', 'font-size':'70px',
                              'color': 'black',
@@ -63,8 +63,8 @@ app.layout = html.Div(id='grad1', children=[
     html.Br(),    
 
     # Dash canvas for drawing captcha
-    #html.Div([html.H2('Draw a CAPTCHA and press Save to see work')]),
-    html.Div([html.H2('Draw a CAPTCHA and press Save to see work'),
+    html.Div([html.H2('Draw a CAPTCHA and press Save to see work')]),
+    html.Div([#html.H2('Draw a CAPTCHA and press Save to see work'),
               DashCanvas(id='canvas',
                        lineWidth=12,
                        lineColor='black',
@@ -141,6 +141,7 @@ def predict(on, string):
         raise PreventUpdate
     
     print('sending string with length:',len(string))
+    #print(string)
     
     # Send image as string to receiver.py to predict with model 
     cmd = ['python', 'receiver.py'] + [string]

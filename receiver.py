@@ -13,6 +13,7 @@ chars = '0123456789' + string.ascii_lowercase
 
 #model = keras.models.load_model('models/draw_model.h5')
 model = keras.models.load_model('models/4cnn_draw_model.h5')
+#model = keras.models.load_model('models/fin_draw_model.h5')
 
 print('receiving string with length:', len(sys.argv[1]))
 
