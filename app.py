@@ -28,8 +28,7 @@ shape = (200,800)
 chars = string.ascii_lowercase + "0123456789"
 # -------------------------------------------------------------------- #
 
-# litera, flatly, mintly
-external_stylesheets = ['https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/litera/bootstrap.min.css'] +['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = ['https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/litera/bootstrap.min.css'] + ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 
 # -------------------------------------------------------------------- #
@@ -41,30 +40,25 @@ app.head = [html.Link(rel='stylesheet', href='style.css')]
 
 app.layout = html.Div(id='grad1', children=[
     
-    
-    html.Div([#html.Img(src=app.get_asset_url('transparent_robot.jpg'), style={'width': '250px'}),
-              html.H1(children='Breaking CAPTCHA', 
-                      style={'text-align': 'center', 'font-size':'70px',
-                             'color': 'black',
-                             #'background': '#60A0B5',
-                             #'border': '3px solid indigo',
-                             #'padding': '7px',
-                             #font-family: monospace;
+    # H1 title
+    html.Div([html.H1(children='Breaking CAPTCHA', 
+                      style={'text-align': 'center', 'font-size':'90px',
+                             '-webkit-text-stroke': '5px #4D8394',
+                             'color': 'white',
+                             'font-weight': 'bold',
             }),
     ]),
         
     # Example captcha images
-    html.Img(src=app.get_asset_url('2a76a.png'), style={'width': '250px'}),
-    html.Img(src=app.get_asset_url('exd3k.png'), style={'width': '250px'}),
-    html.Img(src=app.get_asset_url('ky5fm.png'), style={'width': '250px'}),
-    html.Img(src=app.get_asset_url('w8bp5.png'), style={'width': '250px'}),
-    
-    html.Br(),
-    html.Br(),    
+    #html.Img(src=app.get_asset_url('2a76a.png'), style={'width': '250px'}),
+    #html.Img(src=app.get_asset_url('exd3k.png'), style={'width': '250px'}),
+    #html.Img(src=app.get_asset_url('ky5fm.png'), style={'width': '250px'}),
+    #html.Img(src=app.get_asset_url('w8bp5.png'), style={'width': '250px'}),
+    #html.Br(),
+    #html.Br(),    
 
     # Dash canvas for drawing captcha
-    html.Div([html.H2('Draw a CAPTCHA and press Save to see work')]),
-    html.Div([#html.H2('Draw a CAPTCHA and press Save to see work'),
+    html.Div([html.H2('Draw a CAPTCHA and press SAVE to see work'),
               DashCanvas(id='canvas',
                        lineWidth=12,
                        lineColor='black',
@@ -74,7 +68,9 @@ app.layout = html.Div(id='grad1', children=[
                        width=800,
                        ),
     ], style={'display': 'inline-block', 'vertical-align': 'middle',
-              'background': '#60A0B5', 'border': '3px solid indigo', 'padding': '2px',}),
+              'border-style': 'ridge',
+              'border-width': '20px',
+              'padding': '15px',}),
     
     html.Br(),
     html.Br(),
@@ -99,8 +95,6 @@ app.layout = html.Div(id='grad1', children=[
                                   html.H1(id='prediction')]),
                                   spinner_style={"width":"7rem", "height":"7rem", "color":"info"}),
     ]),
-    
-    #html.Img(src=app.get_asset_url('robots.jpg'), style={'width': '250px','display': 'flex'}),
 ])
 
 
