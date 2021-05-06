@@ -116,6 +116,3 @@ and runs it through a number of different filters, such as the 4 shown here.
 
 In conclusion, building models to break CAPTCHA is very dependent on what CAPTCHA data you can acquire. Although each CAPTCHA instance is different, often times each kind of CAPTCHA still has similarities that can be picked up by a machine learning model. This leads to websites creating new versions of CAPTCHAs to combat people training models to predict CAPTCHAs. But since there will always be people trying to break CAPTCHA, website owners will have to adapt and switch to new versions of CAPTCHAS.
 
-**To continue with this topic:**
-
-...
